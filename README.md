@@ -1,4 +1,4 @@
-# Teknisk Sett Git
+# Teknisk Sett UU
 This project utilizes utilities such as: **Node.js**, **Three.js** and **Rollup**,<br>
 and as such requires some knowledge and setting up before you begin making changes.
 
