@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Sliding Iframe Comparison</title>
+  <link rel="stylesheet" href="../CSS/styles.css">
+  <style>
+    html, body {
+      margin: 0;
+      padding: 0;
+      height: 100%;
+      width: 100%;
+      overflow: hidden;
+    }
+    #container {
+      position: relative;
+      width: 100vw;
+      height: 100vh;
+      overflow: hidden;
+    }
+    iframe {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      border: none;
+      top: 0;
+      left: 0;
+    }
+    #divider {
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      width: 4px;
+      background: #2196f3;
+      cursor: ew-resize;
+      z-index: 10;
+      transition: background 0.2s;
+    }
+    #divider:hover {
+      background: #1976d2;
+    }
+    #slider-wrapper {
+      position: absolute;
+      bottom: 24px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 101.5%;
+      z-index: 20;
+      padding: 8px 16px;
+      border-radius: 16px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+    #slider {
+      width: 100%;
+      padding-bottom: 45vh;
+      appearance: none;
+      background: transparent;
+    }
+    #slider::-webkit-slider-thumb {
+      width: 20px;
+      height: 20px;
+      cursor: pointer;
+      -webkit-appearance: none;
+      appearance: none;
+    }
+    #slider::-moz-range-thumb {
+      width: 20px;
+      height: 100vh;
+      background: #21313f00;
+      border: none;
+      cursor: pointer;
+    }
+    #slider::-ms-thumb {
+      width: 20px;
+      height: 100vh;
+    }
+  </style>
+</head>
+<body>
+  <div id="container">
+    <iframe id="iframe1" src="comparison/home1.html"></iframe>
+    <iframe id="iframe2" src="comparison/home2.html"></iframe>
+    <div id="divider"></div>
+    <div id="slider-wrapper">
+      <input type="range" id="slider" min="0" max="100" value="50" step="0.1">
+    </div>
+  </div>
+  <script>
+    const slider = document.getElementById('slider');
+    const divider = document.getElementById('divider');
+    const iframe2 = document.getElementById('iframe2');
+    const container = document.getElementById('container');
+
+    let sliderValue = 50;
+    let isDragging = false;
+
+    function updateMaskAndDivider(fromSlider = false) {
+      iframe2.style.clipPath = `inset(0 0 0 ${0 + sliderValue}%)`;
+      divider.style.left = `calc(${sliderValue}% - 2px)`;
+      if (!fromSlider) {
+        slider.value = sliderValue;
+      }
+    }
+
+    // Slider input controls mask and divider
+    slider.addEventListener('input', function() {
+      sliderValue = Number(slider.value);
+      updateMaskAndDivider(true);
+    });
+
+    updateMaskAndDivider();
+
+    // --- SYNCHRONIZED SCROLLING ---
+    function syncScroll(srcIframe, targetIframe) {
+      let isSyncing = false;
+      srcIframe.contentWindow.addEventListener('scroll', () => {
+        if (isSyncing) return;
+        isSyncing = true;
+        try {
+          const srcDoc = srcIframe.contentDocument || srcIframe.contentWindow.document;
+          const targetDoc = targetIframe.contentDocument || targetIframe.contentWindow.document;
+          targetDoc.documentElement.scrollTop = srcDoc.documentElement.scrollTop;
+          targetDoc.body.scrollTop = srcDoc.body.scrollTop;
+          targetDoc.documentElement.scrollLeft = srcDoc.documentElement.scrollLeft;
+          targetDoc.body.scrollLeft = srcDoc.body.scrollLeft;
+        } catch (e) {}
+        isSyncing = false;
+      });
+    }
+
+    iframe1.onload = () => syncScroll(iframe1, iframe2);
+    iframe2.onload = () => syncScroll(iframe2, iframe1);
+  </script>
+
+<nav id="navbar">
+  <ul>
+      <li><button style="color: #F1502F;" title="Home" onclick="openPage('home.html')">Home</button></li>
+      <li><button title="Git" onclick="openPage('git.html')">Git</button></li>
+      <li><button title="GitHub" onclick="openPage('github.html')">GitHub</button></li>
+      <li><button title="Tutorial" onclick="openPage('tutorial.html')">Tutorial</button></li>
+      <li><button title="Commands" onclick="openPage('commands.html')">Commands</button></li>
+      <li><button title="Log" onclick="openPage('log.html')">Log</button></li>
+
+      <li class="dropdown">
+          <button class="dropdown-tab">Separate Logs</button>
+          <div class="dropdown-content">
+              <hr>
+              <button class="dropdown-button" title="Log" onclick="openPage('julianlog.html')">Julian</button>
+              <hr>
+              <button class="dropdown-button" title="Log" onclick="openPage('benjaminlog.html')">Benjamin</button>
+              <hr>
+              <button class="dropdown-button" title="Log" onclick="openPage('mortenlog.html')">Morten</button>
+              <hr>
+              <button class="dropdown-button" title="Log" onclick="openPage('daniellog.html')">Daniel</button>
+          </div>
+      </li>
+  </ul>
+</nav>
+<script type="module" src="../JS/navbar.js"></script>
+</body>
+</html>
