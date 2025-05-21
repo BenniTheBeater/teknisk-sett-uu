@@ -4,43 +4,113 @@
   <meta charset="UTF-8">
   <title>Sliding Iframe Comparison</title>
   <link rel="stylesheet" href="../CSS/styles.css">
-  <link rel="stylesheet" href="../CSS/comparison.css">  
+  <link rel="stylesheet" href="../CSS/comparison.css">
+  <style>
+    /* Inline fallback in case not present in your CSS file */
+    #drag-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      z-index: 9999;
+      cursor: ew-resize;
+      display: none;
+    }
+  </style>
 </head>
 <body>
   <div id="container">
     <iframe id="iframe1" src="comparison/home1.html"></iframe>
-    <iframe id="iframe2" src="comparison/home2.html" style="pointer-events: none"></iframe>
+    <iframe id="iframe2" src="comparison/home2.html" style="pointer-events: none;"></iframe>
     <div id="divider"></div>
     <div id="slider-wrapper">
       <input type="range" id="slider" min="0" max="100" value="50" step="0.1">
     </div>
+    <nav id="navbar">
+      <ul>
+        <li><button style="color: #F1502F;" onclick="openPage('home.html')">Home</button></li>
+        <li><button onclick="openPage('git.html')">Git</button></li>
+        <li><button onclick="openPage('github.html')">GitHub</button></li>
+        <li><button onclick="openPage('tutorial.html')">Tutorial</button></li>
+        <li><button onclick="openPage('commands.html')">Commands</button></li>
+        <li><button onclick="openPage('log.html')">Log</button></li>
+        <li class="dropdown">
+          <button class="dropdown-tab">Separate Logs</button>
+          <div class="dropdown-content">
+            <hr><button class="dropdown-button" onclick="openPage('julianlog.html')">Julian</button>
+            <hr><button class="dropdown-button" onclick="openPage('benjaminlog.html')">Benjamin</button>
+            <hr><button class="dropdown-button" onclick="openPage('mortenlog.html')">Morten</button>
+            <hr><button class="dropdown-button" onclick="openPage('daniellog.html')">Daniel</button>
+          </div>
+        </li>
+      </ul>
+    </nav>
   </div>
+
+  <div id="drag-overlay"></div>
+
+  <script type="module" src="../JS/navbar.js"></script>
   <script>
     const slider = document.getElementById('slider');
     const divider = document.getElementById('divider');
     const iframe2 = document.getElementById('iframe2');
+    const iframe1 = document.getElementById('iframe1');
     const container = document.getElementById('container');
+    const dragOverlay = document.getElementById('drag-overlay');
 
     let sliderValue = 50;
     let isDragging = false;
 
     function updateMaskAndDivider(fromSlider = false) {
-      iframe2.style.clipPath = `inset(0 0 0 ${0 + sliderValue}%)`;
+      iframe2.style.clipPath = `inset(0 0 0 ${sliderValue}%)`;
       divider.style.left = `calc(${sliderValue}% - 2px)`;
-      if (!fromSlider) {
-        slider.value = sliderValue;
-      }
+      if (!fromSlider) slider.value = sliderValue;
     }
 
-    // Slider input controls mask and divider
-    slider.addEventListener('input', function() {
+    slider.addEventListener('input', () => {
       sliderValue = Number(slider.value);
       updateMaskAndDivider(true);
     });
 
-    updateMaskAndDivider();
+    divider.addEventListener('mousedown', () => {
+      isDragging = true;
+      dragOverlay.style.display = 'block';
+      document.body.style.cursor = 'ew-resize';
+    });
 
-    // --- SYNCHRONIZED SCROLLING ---
+    document.addEventListener('mouseup', () => {
+      if (isDragging) {
+        isDragging = false;
+        dragOverlay.style.display = 'none';
+        document.body.style.cursor = 'default';
+      }
+    });
+
+    document.addEventListener('mousemove', (e) => {
+      if (!isDragging) return;
+      const rect = container.getBoundingClientRect();
+      const offsetX = e.clientX - rect.left;
+      sliderValue = Math.max(0, Math.min(100, (offsetX / rect.width) * 100));
+      updateMaskAndDivider();
+    });
+
+    container.addEventListener('click', (e) => {
+      if (e.target === divider || e.target === slider || isDragging) return;
+      const rect = container.getBoundingClientRect();
+      const offsetX = e.clientX - rect.left;
+      sliderValue = Math.max(0, Math.min(100, (offsetX / rect.width) * 100));
+      updateMaskAndDivider();
+    });
+
+    divider.addEventListener('mouseenter', () => {
+      iframe2.style.pointerEvents = 'none';
+    });
+
+    divider.addEventListener('mouseleave', () => {
+      if (!isDragging) iframe2.style.pointerEvents = 'auto';
+    });
+
     function syncScroll(srcIframe, targetIframe) {
       let isSyncing = false;
       srcIframe.contentWindow.addEventListener('scroll', () => {
@@ -60,32 +130,9 @@
 
     iframe1.onload = () => syncScroll(iframe1, iframe2);
     iframe2.onload = () => syncScroll(iframe2, iframe1);
+
+    // Initialize on load
+    updateMaskAndDivider();
   </script>
-
-<nav id="navbar">
-  <ul>
-      <li><button style="color: #F1502F;" title="Home" onclick="openPage('home.html')">Home</button></li>
-      <li><button title="Git" onclick="openPage('git.html')">Git</button></li>
-      <li><button title="GitHub" onclick="openPage('github.html')">GitHub</button></li>
-      <li><button title="Tutorial" onclick="openPage('tutorial.html')">Tutorial</button></li>
-      <li><button title="Commands" onclick="openPage('commands.html')">Commands</button></li>
-      <li><button title="Log" onclick="openPage('log.html')">Log</button></li>
-
-      <li class="dropdown">
-          <button class="dropdown-tab">Separate Logs</button>
-          <div class="dropdown-content">
-              <hr>
-              <button class="dropdown-button" title="Log" onclick="openPage('julianlog.html')">Julian</button>
-              <hr>
-              <button class="dropdown-button" title="Log" onclick="openPage('benjaminlog.html')">Benjamin</button>
-              <hr>
-              <button class="dropdown-button" title="Log" onclick="openPage('mortenlog.html')">Morten</button>
-              <hr>
-              <button class="dropdown-button" title="Log" onclick="openPage('daniellog.html')">Daniel</button>
-          </div>
-      </li>
-  </ul>
-</nav>
-<script type="module" src="../JS/navbar.js"></script>
 </body>
 </html>

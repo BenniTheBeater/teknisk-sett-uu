@@ -7,10 +7,10 @@ html, body {
 }
 #container {
   position: relative;
-  width: 100vw;
   height: 100vh;
   overflow: hidden;
 }
+
 iframe {
   position: absolute;
   width: 100%;
@@ -68,4 +68,14 @@ iframe {
 #slider::-ms-thumb {
   width: 20px;
   height: 100vh;
+}
+#drag-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 9999;
+  cursor: ew-resize;
+  display: none;
 }
