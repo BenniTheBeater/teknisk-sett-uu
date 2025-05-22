@@ -41,6 +41,27 @@ body {
   font-style: normal;
 }
 
+.exile-regular {
+    font-family: "Exile", system-ui;
+    font-weight: 400;
+    font-style: normal;
+}
+
+.coral-pixels-regular {
+    font-family: "Coral Pixels", serif;
+    font-weight: 400;
+    font-style: normal;
+}
+
+
+.linefont-nils {
+   font-family: "Linefont", system-ui;
+   font-optical-sizing: auto;
+   font-weight: 500;
+   font-style: normal;
+   font-variation-settings:
+           "wdth" 100;
+}
 
 main {
     margin-top: 50px;
