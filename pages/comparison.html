@@ -50,6 +50,22 @@
     const container = document.getElementById('container');
     const dragOverlay = document.getElementById('drag-overlay');
 
+    iframe2.addEventListener('load', function() {
+      // Listen for a user click anywhere in the parent page
+      document.addEventListener('scroll', function enableIframeVideoSound() {
+        try {
+          const video = iframe2.contentDocument.getElementById('video');
+          if (video) {
+            video.muted = false;
+            video.play();
+            document.removeEventListener('click', enableIframeVideoSound);
+          }
+        } catch (e) {
+          // Cross-origin error or video not found
+        }
+      });
+    });
+
     let sliderValue = 50;
     let isDragging = false;
 

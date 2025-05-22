@@ -329,3 +329,16 @@ footer {
 ::-webkit-scrollbar-thumb:hover {
     background: #ececf1;
 }
+
+#video {
+    position: fixed;
+    bottom: 16px;
+    right: 16px;
+    width: 220px;
+    height: 140px;
+    object-fit: cover;
+    z-index: 9999;
+    border: 4px solid magenta;
+    box-shadow: 0 0 24px lime, 0 0 8px yellow inset;
+    background: orange;
+}
