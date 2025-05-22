@@ -5,12 +5,13 @@ html, body {
   width: 100%;
   overflow: hidden;
 }
+
 #container {
   position: relative;
-  width: 100vw;
   height: 100vh;
   overflow: hidden;
 }
+
 iframe {
   position: absolute;
   width: 100%;
@@ -19,53 +20,90 @@ iframe {
   top: 0;
   left: 0;
 }
-#divider {
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  width: 4px;
-  background: #2196f3;
-  cursor: ew-resize;
-  z-index: 10;
-  transition: background 0.2s;
-}
-#divider:hover {
-  background: #1976d2;
-}
+
 #slider-wrapper {
   position: absolute;
   bottom: 24px;
   left: 50%;
   transform: translateX(-50%);
   width: 101.5%;
-  z-index: 20;
   padding: 8px 16px;
   border-radius: 16px;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
   display: flex;
   justify-content: center;
   align-items: center;
+  z-index: 20;
 }
+
 #slider {
   width: 100%;
   appearance: none;
   background: transparent;
 }
-#slider::-webkit-slider-thumb {
+
+#slider::-webkit-slider-thumb,
+#slider::-moz-range-thumb,
+#slider::-ms-thumb {
   width: 20px;
   height: 20px;
   cursor: pointer;
-  -webkit-appearance: none;
   appearance: none;
-}
-#slider::-moz-range-thumb {
-  width: 20px;
-  height: 1000vh;
-  background: #21313f00;
-  cursor: e-resize;
   border: none;
 }
+
+#slider::-moz-range-thumb {
+  height: 1000vh;
+  background: transparent;
+}
+
 #slider::-ms-thumb {
-  width: 20px;
   height: 100vh;
+}
+
+#drag-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 9999;
+  cursor: ew-resize;
+  display: none;
+}
+
+#divider {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 4px;
+  background-color: rgb(141, 86, 187);
+  cursor: ew-resize;
+  z-index: 10;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transition: background-color 0.2s;
+}
+
+#divider:hover {
+  background-color: rgb(165, 101, 218);
+}
+
+.arrow-circle {
+  width: 40px;
+  height: 40px;
+  background-color: rgb(165, 101, 218);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: auto;
+}
+
+.arrow-icon {
+  width: 40px;
+  height: 32px;
+  stroke: white;
+  pointer-events: none;
 }
