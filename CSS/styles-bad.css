@@ -3,7 +3,9 @@ body {
     padding-top: var(--nav-height);
 
     margin: 0;
-    background-color: #010409;
+    background-color: #808080;
+    background-image: url('../img/background2.gif');
+    background-size: cover;
 
     user-select: none;
     overflow-x: hidden;
@@ -44,8 +46,24 @@ main {
     margin-top: 50px;
     width: 100%;
     position: absolute;
-    color: #ffffff;
+    color: #002aff;
     font-size: larger;
+
+    /* Animated gradient text */
+    background: linear-gradient(270deg, #ff6ec4, #7873f5, #42e695, #ff6ec4);
+    background-size: 800% 800%;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    color: transparent;
+    animation: gradient-text-animate 16s ease infinite;
+
+}
+
+@keyframes gradient-text-animate {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
 }
 
 a {
