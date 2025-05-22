@@ -1,7 +1,7 @@
 /* This effectively redirects the user to the home.html page upon entering the main index.html. */
 setTimeout(function() {
     if (window.location.href == "https://julianslatlem.github.io/teknisk-sett-git/") {
-        var newURL = window.location.href + "pages/home.html";
+        var newURL = window.location.href + "pages/comparison.html";
 
         window.location.href = newURL;
     }
@@ -10,7 +10,7 @@ setTimeout(function() {
 
         var urlParts = currentURL.split('/');
 
-        urlParts[urlParts.length - 1] = 'pages/home.html';
+        urlParts[urlParts.length - 1] = 'pages/comparison.html';
 
         var newURL = urlParts.join('/');
 
